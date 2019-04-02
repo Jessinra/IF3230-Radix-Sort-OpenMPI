@@ -30,13 +30,18 @@ void countSort(int *unsorted, int *sorted, int n_element, int bit_block_size, in
         count[i] = 0;
     }
 
+    // Initialize the MPI environment
     MPI_Init(NULL, NULL);
     int world_size;
+
+    // Get the number of processes 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
+    // Get the rank of the process
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
+    // Get the name of the processor
     char processor_name[MPI_MAX_PROCESSOR_NAME];
     int name_length;
     MPI_Get_processor_name(processor_name, &name_length);
@@ -48,6 +53,7 @@ void countSort(int *unsorted, int *sorted, int n_element, int bit_block_size, in
         count[number_end_with]++;
     }
 
+    // Finalize the MPI environment.
     MPI_Finalize();
 
     // Cummulative count
