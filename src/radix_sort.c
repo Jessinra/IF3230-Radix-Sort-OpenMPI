@@ -16,26 +16,25 @@ void generate_number(int *arr, int n)
     }
 }
 
-void countSort(int *unsorted, int *sorted, int n_element, int bit_block_size, int exp)
+void count_unsorted(int *unsorted, int n_element, int counter_size, int exp, int *result)
 {
-    int counter_size = (int)pow((double)2, (double)bit_block_size);
-
-    int count[counter_size];
-    int i;
+    // Store count of occurrences in count[]
     int number_end_with;
 
-    // Initialize count array
-    for (i = 0; i < counter_size; i++)
+    for (int i = 0; i < n_element; i++)
     {
-        count[i] = 0;
+        number_end_with = (unsorted[i] / exp) % counter_size;
+        result[number_end_with]++;
     }
+}
 
-    // Initialize the MPI environment
-    MPI_Init(NULL, NULL);
+void countSort(int *unsorted, int *sorted, int n_element, int bit_block_size, int exp)
+{
+
+    // Get the number of processes
     int world_size;
-
-    // Get the number of processes 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+    int num_elements_per_proc = (n_element + world_size - 1) / world_size;
 
     // Get the rank of the process
     int world_rank;
@@ -46,24 +45,64 @@ void countSort(int *unsorted, int *sorted, int n_element, int bit_block_size, in
     int name_length;
     MPI_Get_processor_name(processor_name, &name_length);
 
-    // Store count of occurrences in count[]
-    for (i = 0; i < n_element; i++)
+    int counter_size = (int)pow((double)2, (double)bit_block_size);
+    int count[counter_size]; // array of array(int)
+
+    // Initialize count array
+    for (int i = 0; i < counter_size; i++)
     {
-        number_end_with = (unsorted[i] / exp) % counter_size;
-        count[number_end_with]++;
+        count[i] = 0;
     }
 
-    // Finalize the MPI environment.
-    MPI_Finalize();
+    /** =============================================== **/
+
+    int *sub_unsorted = (int *)malloc(sizeof(int) * num_elements_per_proc);
+    int sub_count[counter_size];
+
+    for (int i = 0; i < counter_size; i++)
+    {
+        sub_count[i] = 0;
+    }
+
+    MPI_Scatter(unsorted,
+                num_elements_per_proc,
+                MPI_INT,
+                sub_unsorted,
+                num_elements_per_proc,
+                MPI_INT,
+                0,
+                MPI_COMM_WORLD);
+
+    // for each node
+    count_unsorted(sub_unsorted, num_elements_per_proc, counter_size, exp, sub_count);
+
+    MPI_Reduce(&sub_count,
+               count,
+               counter_size,
+               MPI_INT,
+               MPI_SUM,
+               0,
+               MPI_COMM_WORLD);
+
+    free(sub_unsorted);
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    /** =============================================== **/
+
+    if (world_rank != 0)
+    {
+        return;
+    }
 
     // Cummulative count
-    for (i = 1; i < counter_size; i++)
+    for (int i = 1; i < counter_size; i++)
     {
         count[i] += count[i - 1];
     }
 
     // Build the output array
-    for (i = n_element - 1; i >= 0; i--)
+    for (int i = n_element - 1; i >= 0; i--)
     {
         sorted[count[(unsorted[i] / exp) % counter_size] - 1] = unsorted[i];
         count[(unsorted[i] / exp) % counter_size]--;
@@ -129,30 +168,47 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    // Initialize the MPI environment
+    MPI_Init(NULL, NULL);
+
+    // Get the rank of the process
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
     NUM_OF_ELEMENT = atoi(argv[1]);
     unsorted = malloc(sizeof(int) * NUM_OF_ELEMENT);
     sorted = malloc(sizeof(int) * NUM_OF_ELEMENT);
 
     for (int i = 0; i < repeat; i++)
     {
-
-        // printf("Sorting for %d", NUM_OF_ELEMENT);
-        generate_number(unsorted, NUM_OF_ELEMENT);
+        if (world_rank == 0)
+        {
+            // printf("Sorting for %d", NUM_OF_ELEMENT);
+            generate_number(unsorted, NUM_OF_ELEMENT);
+        }
 
         // ignore CLOCK_MONOTONIC warning
         clock_gettime(CLOCK_MONOTONIC, &start);
         radix_solve(unsorted, sorted, NUM_OF_ELEMENT);
         clock_gettime(CLOCK_MONOTONIC, &end);
 
-        elapsed_time = get_elapsed_time(start, end);
-        total_elapsed_time += elapsed_time;
-        // printf("\nTime elapsed (microsec) iter %d : %lg", i, elapsed_time);
-
+        if (world_rank == 0)
+        {
+            elapsed_time = get_elapsed_time(start, end);
+            total_elapsed_time += elapsed_time;
+            printf("Time elapsed (microsec) iter %d : %lg\n", i, elapsed_time);
+        }
     }
     // printf("\nTime average elapsed (microsec) : %lg\n", total_elapsed_time / repeat);
 
-    swap(&unsorted, &sorted);
-    display_output(sorted, NUM_OF_ELEMENT);
-    
+    if (world_rank == 0)
+    {
+        swap(&unsorted, &sorted);
+        // display_output(sorted, NUM_OF_ELEMENT);
+    }
+
+    // Finalize the MPI environment.
+    MPI_Finalize();
+
     return 0;
 }
