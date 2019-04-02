@@ -81,7 +81,7 @@ void radix_solve(int *unsorted, int *sorted, int n_element)
     {
         exp *= pow(2, BIT_BLOCK_SIZE);
 
-        countSort(unsorted, sorted, n_element, BIT_BLOCK_SIZE, exp, processor_name, world_rank, world_size);
+        countSort(unsorted, sorted, n_element, BIT_BLOCK_SIZE, exp);
         swap(&unsorted, &sorted);
     }
 }
