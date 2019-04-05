@@ -116,9 +116,8 @@ void swap(int **a, int **b)
     *b = temp;
 }
 
-void radix_solve(int *unsorted, int *sorted, int n_element)
+void radix_solve(int *unsorted, int *sorted, int n_element, int BIT_BLOCK_SIZE)
 {
-    int BIT_BLOCK_SIZE = 8; // pakai 4 core
     int exp = 1;
 
     // Do counting sort for every digit.
@@ -151,7 +150,7 @@ void display_output(int *sorted, int head_count)
 
 int main(int argc, char *argv[])
 {
-
+    int BIT_BLOCK_SIZE = 8; // pakai 4 core
     int NUM_OF_ELEMENT;
     int *unsorted;
     int *sorted;
@@ -179,17 +178,21 @@ int main(int argc, char *argv[])
     unsorted = malloc(sizeof(int) * NUM_OF_ELEMENT);
     sorted = malloc(sizeof(int) * NUM_OF_ELEMENT);
 
+    if (world_rank == 0)
+    {
+        printf("Sorting for %d, block: %d \n", NUM_OF_ELEMENT, BIT_BLOCK_SIZE);
+    }
+
     for (int i = 0; i < repeat; i++)
     {
         if (world_rank == 0)
         {
-            // printf("Sorting for %d", NUM_OF_ELEMENT);
             generate_number(unsorted, NUM_OF_ELEMENT);
         }
 
         // ignore CLOCK_MONOTONIC warning
         clock_gettime(CLOCK_MONOTONIC, &start);
-        radix_solve(unsorted, sorted, NUM_OF_ELEMENT);
+        radix_solve(unsorted, sorted, NUM_OF_ELEMENT, BIT_BLOCK_SIZE);
         clock_gettime(CLOCK_MONOTONIC, &end);
 
         if (world_rank == 0)
