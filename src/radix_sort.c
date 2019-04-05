@@ -150,7 +150,7 @@ void display_output(int *sorted, int head_count)
 
 int main(int argc, char *argv[])
 {
-    int BIT_BLOCK_SIZE = 8; // pakai 4 core
+    int BIT_BLOCK_SIZE;
     int NUM_OF_ELEMENT;
     int *unsorted;
     int *sorted;
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
     int repeat = 10;
 
-    if (argc <= 1)
+    if (argc <= 2)
     {
         return -1;
     }
@@ -175,6 +175,8 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
     NUM_OF_ELEMENT = atoi(argv[1]);
+    BIT_BLOCK_SIZE = atoi(argv[2]);
+
     unsorted = malloc(sizeof(int) * NUM_OF_ELEMENT);
     sorted = malloc(sizeof(int) * NUM_OF_ELEMENT);
 
