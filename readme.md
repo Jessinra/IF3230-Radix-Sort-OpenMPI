@@ -13,8 +13,9 @@
 mpirun --hostfile src/mpi_host.txt -q -np <P> build/radix_sort <N> <B>
 ```
  Dengan P adalah jumlah processor, N adalah jumlah elemen pada array, dan B adalah jumlah block yang digunakan.
+
 6. Hasil lamanya waktu pengerjaan sorting akan ditampilkan pada layar
-<br>
+
 ##### Penggunaan Program di Local
 1. Clone repository terlebih dahulu
 2. Buka terminal
@@ -25,6 +26,7 @@ mpirun --hostfile src/mpi_host.txt -q -np <P> build/radix_sort <N> <B>
 mpiexec -np <P> build/radix_sort <N> <B>
 ```
 Dengan P adalah jumlah processor, N adalah jumlah elemen pada array, dan B adalah jumlah block yang digunakan.
+
 6. Hasil lamanya waktu pengerjaan sorting akan ditampilkan pada layar
 
 #### [Pembagian Tugas]
@@ -75,10 +77,10 @@ Setelah dilakukan analisa, thread yang optimal untuk digunakan sebanyak 8. Hal i
 Setelah dilakukan pengukuran kinerja, diketahui bahwa dalam 10 iterasi, didapatkan hasil bahwa:
 
 ##### Untuk N = 400000
-rata-rata waktu serial relatif lebih lambat dibandingkan waktu paralel 8 processor hamun lebih cepat dibandingkan waktu paralel 4 processor. <br>
+rata-rata waktu serial relatif lebih lambat dibandingkan waktu paralel 8 processor namun lebih cepat dibandingkan waktu paralel 4 processor. <br>
 
 ##### Untuk N = 200000
-rata-rata waktu serial relatif lebih lambat dibandingkan waktu paralel 8 processor hamun lebih cepat dibandingkan waktu paralel 4 processor. <br>
+rata-rata waktu serial relatif lebih lambat dibandingkan waktu paralel 8 processor namun lebih cepat dibandingkan waktu paralel 4 processor. <br>
 
 ##### Untuk N = 100000
 rata-rata waktu serial relatif lebih cepat dibandingkan waktu paralel yang menggunakan 4 atau 8 processor. <br>
@@ -89,4 +91,4 @@ rata-rata waktu serial relatif lebih cepat dibandingkan waktu paralel yang mengg
 ##### Untuk N = 5000
 rata-rata waktu serial relatif lebih cepat dibandingkan waktu paralel yang menggunakan 4 atau 8 processor. <br>
 
-Dapat ditarik kesimpulan Waktu yang dibutuhkan untuk menjalankan sort secara paralel lebih lama karena dalam melakukan sort, perlu membagi ke dalam thread dan perlu mengcopy data. Apabila dilakukan dalam jumlah elemen yang relatif lebih rendah, maka penggunaan program paralel tidak akan efektif, sedangkan jika jumlah elemen banyak, semakin banyak processor akan menghasilkan _time elapsed_ lebih cepat.
+Dapat ditarik kesimpulan Waktu yang dibutuhkan untuk menjalankan sort secara paralel lebih lama karena dalam melakukan sort, perlu membagi ke dalam thread dan perlu mengcopy data. Apabila dilakukan dalam jumlah elemen yang relatif lebih rendah, maka penggunaan program paralel tidak akan efektif, sedangkan jika jumlah elemen banyak, penambahan processor sampai angka tertentu akan mempercepat eksekusi.

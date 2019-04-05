@@ -10,51 +10,51 @@ B = jumlah block yang digunakan
 
 #### [Sample Input dan Output]
 ##### Untuk N = 400000
-Serial
+Serial<br>
 ![](../pictures/Serial_400000_block8.png)
 
-Paralel dengan 4 Processor
+Paralel dengan 4 Processor<br>
 ![](../pictures/Paralel4_400000_block8.png)
 
-Paralel dengan 8 Processor
+Paralel dengan 8 Processor<br>
 ![](../pictures/Paralel8_400000_block8.png)
 
 ##### Untuk N = 200000
-Serial
+Serial<br>
 ![](../pictures/Serial_200000_block8.png)
 
-Paralel dengan 4 Processor
+Paralel dengan 4 Processor<br>
 ![](../pictures/Paralel4_200000_block8.png)
 
-Paralel dengan 8 Processor
+Paralel dengan 8 Processor<br>
 ![](../pictures/Paralel8_200000_block8.png)
 
 ##### Untuk N = 100000
-Serial
+Serial<br>
 ![](../pictures/Serial_100000_block8.png)
 
-Paralel dengan 4 Processor
+Paralel dengan 4 Processor<br>
 ![](../pictures/Paralel4_100000_block8.png)
 
-Paralel dengan 8 Processor
+Paralel dengan 8 Processor<br>
 ![](../pictures/Paralel8_100000_block8.png)
 
 ##### Untuk N = 50000
-Serial
+Serial<br>
 ![](../pictures/Serial_50000_block8.png)
 
-Paralel dengan 4 Processor
+Paralel dengan 4 Processor<br>
 ![](../pictures/Paralel4_50000_block8.png)
 
-Paralel dengan 8 Processor
+Paralel dengan 8 Processor<br>
 ![](../pictures/Paralel8_50000_block8.png)
 
 ##### Untuk N = 5000
-Serial
+Serial<br>
 ![](../pictures/Serial_5000_block8.png)
 
-Paralel dengan 4 Processor
+Paralel dengan 4 Processor<br>
 ![](../pictures/Paralel4_5000_block8.png)
 
-Paralel dengan 8 Processor
+Paralel dengan 8 Processor<br>
 ![](../pictures/Paralel8_5000_block8.png)
