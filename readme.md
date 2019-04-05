@@ -57,7 +57,9 @@ Berbeda hal jika array yang diperlu di *sort* merupakan hasil baca dari file ext
 Dari solusi permasalahan radix sort yang dibuat oleh kelompok kami secara paralel, tidak ada solusi lain yang lebih optimal.
 
 ##### III. Jumlah Thread
-Thread yang digunakan 4 dan 8. Dengan menggunakan berbagai varian jumlah thread, diharapkan dapat digunakan untuk menganalisa kinerja paralelisme juga thread mana yang lebih baik digunakan.
+Thread yang digunakan untuk uji coba sebanyak 4 dan 8. Dengan menggunakan berbagai varian jumlah thread, diharapkan dapat digunakan untuk menganalisa kinerja paralelisme juga thread mana yang lebih baik digunakan.
+
+Setelah dilakukan analisa, thread yang optimal untuk digunakan sebanyak 8. Hal ini karena server menggunakan 4 core. Sedangkan by default, mesin yang digunakan menggunakan *multicore* dan *hyperthread* sehingga total thread sebanyak 8.
 
 ##### IV. Pengukuran Kinerja
 | N | Block | Serial | Paralel np 4 | Paralel np 8
